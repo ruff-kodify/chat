@@ -6,6 +6,9 @@ exports[`it should render properly 1`] = `
 >
   <PartnerInfo />
   <Messages />
-  <Input />
+  <Input
+    onSend={[Function]}
+    onType={[Function]}
+  />
 </div>
 `;
