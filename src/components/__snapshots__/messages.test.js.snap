@@ -1,3 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`it should render properly 1`] = `"Hello messages"`;
+exports[`it should render properly 1`] = `
+<div
+  className="messages"
+>
+  <Message
+    body="foo"
+    id={1}
+    key="1"
+    type="user"
+  />
+  <Message
+    body="bar"
+    id={2}
+    key="2"
+    type="user"
+  />
+</div>
+`;

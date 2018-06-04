@@ -5,7 +5,9 @@ exports[`it should render properly 1`] = `
   className="chat"
 >
   <PartnerInfo />
-  <Messages />
+  <Messages
+    messages={Array []}
+  />
   <Input
     onSend={[Function]}
     onType={[Function]}
