@@ -20,3 +20,18 @@ test('it should add a thought', () => {
   expect(wrapper.find('.message--thought')).toHaveLength(1);
   expect(wrapper.find('.message--thought').text()).toBe(arg);
 });
+
+test('it should add a new user message', () => {
+  const wrapper = mount(<Chat />);
+  const input = wrapper.find('[data-test="input"]');
+  const button = wrapper.find('[data-test="button"]');
+  const message = 'Hello';
+
+  expect(wrapper.find('.message')).toHaveLength(0);
+
+  input.simulate('change', { target: { value: message } });
+  button.simulate('click');
+
+  expect(wrapper.find('.message')).toHaveLength(1);
+  expect(wrapper.find('.message--user')).toHaveLength(1);
+});

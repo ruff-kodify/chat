@@ -52,6 +52,11 @@ class Chat extends React.Component {
     }
 
   }
+
+  handleSendMessage = (message) => {
+    this.addMessage(message);
+  }
+
   render() {
     return (
       <div className="chat">
@@ -62,6 +67,8 @@ class Chat extends React.Component {
             if (isCommand(message)) {
               const { command, args } = parseCommand(message);
               this.handleCommand(command, args);
+            } else {
+              this.handleSendMessage(message);
             }
           } }
         />
