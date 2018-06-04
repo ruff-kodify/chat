@@ -61,7 +61,9 @@ class Input extends React.Component {
         <button
           data-test="button"
           onClick={ this.handleButtonClick }
-        />
+        >
+          Send
+        </button>
       </div>
     );
   }
