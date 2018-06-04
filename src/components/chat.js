@@ -3,16 +3,39 @@ import PartnerInfo from './partner-info';
 import Messages from './messages';
 import Input from './input';
 import { isCommand, parseCommand } from '../utils/command';
+import { createUser } from '../utils/user';
 
 class Chat extends React.Component {
   static displayName = 'Chat'
 
   state = {
-    messages: []
+    messages: [],
+    users: [],
   }
 
-  setName = () => {
-    // to be implemented
+  componentDidMount() {
+    this._user = createUser();
+    this.setUser(this._user);
+  }
+
+  setUser = (user) => {
+    this.setState((state) => ({
+      users: state.users.concat(user),
+    }));
+  }
+
+  setName = (name) => {
+    this.setState((state) => ({
+      users: state.users.map(user => {
+        if (user.id === this._user.id) {
+          return {
+            ...user,
+            name: name,
+          };
+        }
+        return user;
+      })
+    }));
   }
 
   addMessage = (body, type = 'user') => {
@@ -33,12 +56,17 @@ class Chat extends React.Component {
 
     switch (command) {
       case 'nick': {
-        this.setName();
+        if (!args) {
+          alert('Invalid argument');
+          return;
+        }
+        this.setName(args[0]);
         break;
       }
       case 'think': {
         if (!args) {
-          alert('Invalid argument.')
+          alert('Invalid argument.');
+          return;
         }
         this.addMessage(args[0], 'thought');
         break;
