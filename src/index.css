@@ -6,19 +6,25 @@ body {
   font-family: sans-serif;
 }
 
+body, body * {
+  box-sizing: border-box;
+}
+
+.chat {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
 .messages {
-  height: calc(100% - 91px);
-  display: flex;
-  flex-direction: column;
-  align-content: flex-end;
+  height: calc(100% - 42px);
   overflow-x: hidden;
-  overflow: auto;
+  overflow-y: auto;
   padding: 10px;
   background: #fbfbfb;
 }
 
 .message {
-  display: inline-block;
   margin-right: auto;
   margin-bottom: 15px;
   color: black;
@@ -68,4 +74,32 @@ body {
 
 .message-body {
   padding: 10px;
+}
+
+.input {
+  padding: 0 5px;
+}
+
+.input input[type="text"] {
+  width: calc(100% - 85px);
+  appearance: none;
+  border: none;
+  height: 35px;
+  outline: none;
+  font-size: 16px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  margin-right: 5px;
+  padding: 5px;
+}
+
+.send-button {
+  appearance: none;
+  border: none;
+  width: 80px;
+  height: 37px;
+  font-size: 14px;
+  background: #2196f3;
+  color: white;
+  border-radius: 10px;
 }

@@ -12,6 +12,7 @@ exports[`it should render properly 1`] = `
     value=""
   />
   <button
+    className="send-button"
     data-test="button"
     onClick={[Function]}
   >

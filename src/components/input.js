@@ -59,6 +59,7 @@ class Input extends React.Component {
           onKeyUp={ this.handleKeyUp }
         />
         <button
+          className="send-button"
           data-test="button"
           onClick={ this.handleButtonClick }
         >
