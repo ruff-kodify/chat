@@ -225,6 +225,9 @@ class Chat extends React.Component {
         />
         <Input
           onSend={ (message) => {
+            if (!message) {
+              return;
+            }
             if (isCommand(message)) {
               const { command, args } = parseCommand(message);
               this.handleCommand(command, args);
