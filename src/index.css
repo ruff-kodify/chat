@@ -103,3 +103,8 @@ body, body * {
   color: white;
   border-radius: 10px;
 }
+
+.message--thought .message-body {
+  font-style: italic;
+  color: darkgrey;
+}
