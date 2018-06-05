@@ -109,6 +109,10 @@ body, body * {
   color: darkgrey;
 }
 
+.message--user-disconnected {
+  opacity: 0.4;
+}
+
 .typing-user {
   font-size: 12px;
   line-height: 15px;

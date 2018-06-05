@@ -14,7 +14,8 @@ const Message = (props) => {
       data-id={ props.id }
       className={ classNames('message', {
         [`message--${props.type}`]: true,
-        [`message--me`]: !!sender.isMe,
+        'message--me': !!sender.isMe,
+        'message--user-disconnected': !sender.connected
       }) }
     >
       <div className="message-header">
