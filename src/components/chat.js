@@ -66,7 +66,11 @@ class Chat extends React.Component {
 
     socket.on('message', (message) => {
       this.addMessage(message);
-    })
+    });
+
+    socket.on('message:remove', (id) => {
+      this.removeMessage(id);
+    });
   }
 
   addUser = (user) => {
@@ -111,10 +115,10 @@ class Chat extends React.Component {
     });
   }
 
-  addMessage = ({ body, type, senderId }) => {
+  addMessage = ({ id, body, type, senderId }) => {
     this.setState((state) => ({
       messages: state.messages.concat({
-        id: uuid(),
+        id,
         sentAt: Date.now(),
         body,
         type,
@@ -132,8 +136,33 @@ class Chat extends React.Component {
     socket.emit('message', message);
   }
 
+  getLastMessage = () =>  {
+    for (let i = this.state.messages.length - 1; i >= 0; i--) {
+      if (this.state.messages[i].senderId === this._user.id) {
+        return this.state.messages[i];
+      }
+    }
+  }
+
   removeLastMessage = () => {
-    // to be implemented
+    const message = this.getLastMessage();
+    if (message) {
+      this.removeAndBroadcastMessage(message.id);
+    }
+
+  }
+
+  removeMessage = (id) => {
+    this.setState((state) => {
+      return {
+        messages: state.messages.filter(message => message.id !== id)
+      };
+    });
+  }
+
+  removeAndBroadcastMessage(id) {
+    this.removeMessage(id);
+    socket.emit('message:remove', id);
   }
 
   handleCommand(command, args) {
@@ -155,6 +184,7 @@ class Chat extends React.Component {
           return;
         }
         this.addAndBroadcastMessage({
+          id: uuid(),
           body: args[0],
           type: 'thought',
           senderId: this._user.id,
@@ -173,6 +203,7 @@ class Chat extends React.Component {
 
   handleSendMessage = (message) => {
     this.addAndBroadcastMessage({
+      id: uuid(),
       body: message,
       type: 'user',
       senderId: this._user.id,

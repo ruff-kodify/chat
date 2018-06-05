@@ -34,6 +34,12 @@ export function createServer() {
       });
     });
 
+    socket.on('message:remove', (id) => {
+      sockets.filter(s => s.id !== socket.id).forEach(s => {
+        s.emit('message:remove', id);
+      });
+    });
+
     socket.on('disconnect', () => {
       sockets = sockets.filter(s => s.id !== socket.id);
       const user = users.find(user => user.clientId === socket.id);
