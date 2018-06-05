@@ -36,6 +36,10 @@ class Chat extends React.Component {
     socket.on('user:join', (user) => {
       this.addUser(user);
     });
+
+    socket.on('message', (message) => {
+      this.addMessage(message);
+    })
   }
 
   addUser = (user) => {
@@ -70,6 +74,11 @@ class Chat extends React.Component {
     }))
   }
 
+  addAndBroadcastMessage = (message) => {
+    this.addMessage(message);
+    socket.emit('message', message);
+  }
+
   removeLastMessage = () => {
     // to be implemented
   }
@@ -92,7 +101,7 @@ class Chat extends React.Component {
           alert('Invalid argument.');
           return;
         }
-        this.addMessage({
+        this.addAndBroadcastMessage({
           body: args[0],
           type: 'thought',
           senderId: this._user.id,
@@ -110,7 +119,7 @@ class Chat extends React.Component {
   }
 
   handleSendMessage = (message) => {
-    this.addMessage({
+    this.addAndBroadcastMessage({
       body: message,
       type: 'user',
       senderId: this._user.id,

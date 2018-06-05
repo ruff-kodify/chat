@@ -15,6 +15,12 @@ export function createServer() {
       });
     });
 
+    socket.on('message', (message) => {
+      sockets.filter(s => s.id !== socket.id).forEach(s => {
+        s.emit('message', message);
+      });
+    });
+
     socket.on('disconnect', () => {
       console.log('user:leave');
     });
