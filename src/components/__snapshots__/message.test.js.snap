@@ -3,8 +3,18 @@
 exports[`it should render properly 1`] = `
 <div
   className="message message--user"
-  data-id={1}
+  data-id="1"
 >
-  hello world!
+  <div
+    className="message-sender"
+  >
+    Unknown
+  </div>
+  <div
+    className="message-body"
+    data-test="body"
+  >
+    hello world!
+  </div>
 </div>
 `;

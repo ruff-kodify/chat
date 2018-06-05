@@ -4,6 +4,7 @@ import Messages from './messages';
 import Input from './input';
 import { isCommand, parseCommand } from '../utils/command';
 import { createUser } from '../utils/user';
+import uuid from 'uuid/v4';
 
 class Chat extends React.Component {
   static displayName = 'Chat'
@@ -38,12 +39,14 @@ class Chat extends React.Component {
     }));
   }
 
-  addMessage = (body, type = 'user') => {
+  addMessage = ({ body, type, senderId }) => {
     this.setState((state) => ({
       messages: state.messages.concat({
-        id: Date.now(),
+        id: uuid(),
+        sentAt: Date.now(),
         body,
-        type
+        type,
+        senderId,
       })
     }))
   }
@@ -70,7 +73,11 @@ class Chat extends React.Component {
           alert('Invalid argument.');
           return;
         }
-        this.addMessage(args[0], 'thought');
+        this.addMessage({
+          body: args[0],
+          type: 'thought',
+          senderId: this._user.id,
+        });
         break;
       }
       case 'oops': {
@@ -84,14 +91,21 @@ class Chat extends React.Component {
   }
 
   handleSendMessage = (message) => {
-    this.addMessage(message);
+    this.addMessage({
+      body: message,
+      type: 'user',
+      senderId: this._user.id,
+    });
   }
 
   render() {
     return (
       <div className="chat">
         <PartnerInfo />
-        <Messages messages={ this.state.messages } />
+        <Messages
+          users={ this.state.users }
+          messages={ this.state.messages }
+        />
         <Input
           onSend={ (message) => {
             if (isCommand(message)) {

@@ -4,9 +4,16 @@ import Message from './message';
 test('it should render properly', () => {
   const wrapper = shallow(
     <Message
-      id={ 1 }
+      id="1"
       type="user"
       body="hello world!"
+      senderId="1"
+      users={[
+        {
+          id: '1',
+          name: 'Unknown'
+        }
+      ]}
     />
   );
   expect(wrapper).toMatchSnapshot();

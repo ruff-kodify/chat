@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { userShape } from '../utils/user';
 
 const Message = (props) => {
+  const sender = props.users.find(user => user.id === props.senderId);
   return (
     <div
       data-id={ props.id }
@@ -10,7 +12,12 @@ const Message = (props) => {
         [`message--${props.type}`]: true,
       }) }
     >
-      { props.body }
+      <div className="message-sender">
+        { sender.name }
+      </div>
+      <div className="message-body" data-test="body">
+        { props.body }
+      </div>
     </div>
   );
 };
@@ -18,13 +25,17 @@ const Message = (props) => {
 Message.displayName = 'Message';
 
 const propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   body: PropTypes.string.isRequired,
+  senderId: PropTypes.string.isRequired,
 };
 
 export const messageShape = PropTypes.shape(propTypes);
 
-Message.propTypes = propTypes;
+Message.propTypes = {
+  ...propTypes,
+  users: PropTypes.arrayOf(userShape).isRequired,
+};
 
 export default Message;
