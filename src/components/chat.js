@@ -6,6 +6,8 @@ import { isCommand, parseCommand } from '../utils/command';
 import { createUser } from '../utils/user';
 import uuid from 'uuid/v4';
 import createSocket from 'socket.io-client';
+import TypingUser from './typing-user';
+import debounce from 'lodash.debounce';
 
 const socket = createSocket(process.env.REACT_APP_SOCKET_URL);
 
@@ -19,7 +21,8 @@ class Chat extends React.Component {
   state = {
     messages: [],
     users: [],
-    connected: this.props.connected
+    connected: this.props.connected,
+    typingUser: null,
   }
 
   componentDidMount() {
@@ -64,12 +67,43 @@ class Chat extends React.Component {
       this.removeUser(id);
     });
 
+    socket.on('user:typing', (id) => {
+      this.setTypingUser(id);
+    });
+
     socket.on('message', (message) => {
       this.addMessage(message);
     });
 
     socket.on('message:remove', (id) => {
       this.removeMessage(id);
+    });
+  }
+
+  componentWillMount() {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+  }
+
+  setTypingUser = (id) => {
+
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+
+    this.setState({
+      typingUser: id
+    }, () => {
+      this.timer = setTimeout(() => {
+        this.removeTypingUser(id);
+      }, 1000);
+    });
+  }
+
+  removeTypingUser(id) {
+    this.setState({
+      typingUser: null
     });
   }
 
@@ -210,6 +244,10 @@ class Chat extends React.Component {
     });
   }
 
+  broadcastTyping = debounce(() => {
+    socket.emit('user:typing', this._user.id);
+  }, 100)
+
   render() {
     if (!this.state.connected) {
       return 'loading...';
@@ -223,7 +261,14 @@ class Chat extends React.Component {
             this.messages = ReactDOM.findDOMNode(el);
           } }
         />
+        <TypingUser
+          id={ this.state.typingUser }
+          users={ this.state.users }
+        />
         <Input
+          onType={ () => {
+            this.broadcastTyping();
+          } }
           onSend={ (message) => {
             if (!message) {
               return;

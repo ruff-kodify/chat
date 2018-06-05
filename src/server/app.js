@@ -28,6 +28,12 @@ export function createServer() {
       });
     });
 
+    socket.on('user:typing', (id) => {
+      sockets.filter(s => s.id !== socket.id).forEach(s => {
+        s.emit('user:typing', id);
+      });
+    });
+
     socket.on('message', (message) => {
       sockets.filter(s => s.id !== socket.id).forEach(s => {
         s.emit('message', message);
