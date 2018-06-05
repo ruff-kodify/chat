@@ -3,6 +3,12 @@ import PropTypes from 'prop-types';
 
 const KEY_ENTER = 13;
 
+const emojiMap = {
+  '(smile)': '😀',
+  '(wink)': '😉',
+  '(sad)': '😔'
+};
+
 class Input extends React.Component {
 
   static propTypes = {
@@ -30,9 +36,26 @@ class Input extends React.Component {
     this.empty();
   }
 
+  handelEmojis(value) {
+    const possibleEmojis = value.match(/\(([a-zA-Z0-9-\s]+)\)/g);
+    let result = value;
+    if (possibleEmojis) {
+      possibleEmojis.forEach(emoji => {
+        if (emojiMap[emoji]) {
+          result = result.replace(emoji, emojiMap[emoji]);
+        }
+      });
+    }
+    return result;
+  }
+
   handleChange = (e) => {
+    let value = e.target.value;
+
+    value = this.handelEmojis(value);
+
     this.setState({
-      value: e.target.value
+      value
     });
   }
 
