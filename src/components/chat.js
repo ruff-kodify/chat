@@ -15,22 +15,22 @@ class Chat extends React.Component {
 
   componentDidMount() {
     this._user = createUser();
-    this.setUser(this._user);
+    this.addUser(this._user);
   }
 
-  setUser = (user) => {
+  addUser = (user) => {
     this.setState((state) => ({
       users: state.users.concat(user),
     }));
   }
 
-  setName = (name) => {
+  updateUser = (id, props) => {
     this.setState((state) => ({
       users: state.users.map(user => {
-        if (user.id === this._user.id) {
+        if (user.id === id) {
           return {
             ...user,
-            name: name,
+            ...props,
           };
         }
         return user;
@@ -60,7 +60,9 @@ class Chat extends React.Component {
           alert('Invalid argument');
           return;
         }
-        this.setName(args[0]);
+        this.updateUser(this._user.id, {
+          name: args[0]
+        });
         break;
       }
       case 'think': {
