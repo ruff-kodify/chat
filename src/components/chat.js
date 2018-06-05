@@ -1,5 +1,4 @@
 import React from 'react';
-import PartnerInfo from './partner-info';
 import Messages from './messages';
 import Input from './input';
 import { isCommand, parseCommand } from '../utils/command';
@@ -178,7 +177,6 @@ class Chat extends React.Component {
     }
     return (
       <div className="chat">
-        <PartnerInfo />
         <Messages
           users={ this.state.users }
           messages={ this.state.messages }
