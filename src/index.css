@@ -116,3 +116,14 @@ body, body * {
   padding: 5px;
   height: 25px;
 }
+
+.countdown {
+  position: fixed;
+  pointer-events: none;
+  width: 100vw;
+  height: 100vh;
+  font-size: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

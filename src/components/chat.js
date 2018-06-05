@@ -8,6 +8,9 @@ import uuid from 'uuid/v4';
 import createSocket from 'socket.io-client';
 import TypingUser from './typing-user';
 import debounce from 'lodash.debounce';
+import validator from 'validator';
+import prependHttp from 'prepend-http';
+import Countdown from './countdown';
 
 const socket = createSocket(process.env.REACT_APP_SOCKET_URL);
 
@@ -23,6 +26,7 @@ class Chat extends React.Component {
     users: [],
     connected: this.props.connected,
     typingUser: null,
+    countdown: -1
   }
 
   componentDidMount() {
@@ -78,11 +82,18 @@ class Chat extends React.Component {
     socket.on('message:remove', (id) => {
       this.removeMessage(id);
     });
+
+    socket.on('countdown', (data) => {
+      this.startCountdown(data.from, data.url);
+    });
   }
 
   componentWillMount() {
     if (this.timer) {
       clearTimeout(this.timer);
+    }
+    if (this.interval) {
+      clearInterval(this.interval);
     }
   }
 
@@ -199,6 +210,29 @@ class Chat extends React.Component {
     socket.emit('message:remove', id);
   }
 
+  broadcastCountdown(from, url) {
+    socket.emit('countdown', {
+      from,
+      url
+    });
+  }
+
+  startCountdown(from, url) {
+    this.setState({
+      countdown: from
+    }, () => {
+      this.interval = setInterval(() => {
+        this.setState((state) => ({
+          countdown: state.countdown - 1
+        }), () => {
+          if (this.state.countdown < 0) {
+            document.location.href = prependHttp(url);
+          }
+        });
+      }, 1000);
+    });
+  }
+
   handleCommand(command, args) {
 
     switch (command) {
@@ -229,6 +263,24 @@ class Chat extends React.Component {
         this.removeLastMessage();
         break;
       }
+      case 'countdown': {
+        if (!args) {
+          alert('Invalid argument.');
+          return;
+        }
+        const from = +args[0];
+        if (!from) {
+          alert('Countdown should be bigger then 0.')
+          return;
+        }
+        const url = args[1] || '';
+        if (!validator.isURL(url)) {
+          alert('Countdown: You should add a valid url.')
+          return;
+        }
+        this.broadcastCountdown(from, url);
+        break;
+      }
       default:
         break;
     }
@@ -254,6 +306,7 @@ class Chat extends React.Component {
     }
     return (
       <div className="chat">
+        { this.state.countdown > 0 && <Countdown value={ this.state.countdown } /> }
         <Messages
           users={ this.state.users }
           messages={ this.state.messages }

@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it should render properly if value is not set 1`] = `
+<div
+  className="countdown"
+/>
+`;
+
+exports[`it should render properly if value is set 1`] = `
+<div
+  className="countdown"
+>
+  5
+</div>
+`;
