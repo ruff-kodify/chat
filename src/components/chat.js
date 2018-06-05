@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Messages from './messages';
 import Input from './input';
 import { isCommand, parseCommand } from '../utils/command';
@@ -119,7 +120,11 @@ class Chat extends React.Component {
         type,
         senderId,
       })
-    }))
+    }), () => {
+      if (this.messages) {
+        this.messages.scrollTop = this.messages.scrollHeight;
+      }
+    });
   }
 
   addAndBroadcastMessage = (message) => {
@@ -183,6 +188,9 @@ class Chat extends React.Component {
         <Messages
           users={ this.state.users }
           messages={ this.state.messages }
+          ref={ el => {
+            this.messages = ReactDOM.findDOMNode(el);
+          } }
         />
         <Input
           onSend={ (message) => {
