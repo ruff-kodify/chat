@@ -5,6 +5,7 @@ exports[`it should render properly 1`] = `
   className="input"
 >
   <input
+    autoFocus={true}
     data-test="input"
     onChange={[Function]}
     onKeyUp={[Function]}

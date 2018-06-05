@@ -80,6 +80,7 @@ class Input extends React.Component {
           value={ this.state.value }
           onChange={ this.handleChange }
           onKeyUp={ this.handleKeyUp }
+          autoFocus={ true }
         />
         <button
           className="send-button"
