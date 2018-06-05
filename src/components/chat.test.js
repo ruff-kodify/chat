@@ -1,8 +1,17 @@
 import React from 'react';
 import Chat from './chat';
 
-test('it should add a thought', () => {
+const props = {
+  connected: true
+};
+
+test('it should render loading state', () => {
   const wrapper = mount(<Chat />);
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('it should add a thought', () => {
+  const wrapper = mount(<Chat { ...props } />);
   const input = wrapper.find('[data-test="input"]');
   const button = wrapper.find('[data-test="button"]');
   const arg = 'Oops I did it again';
@@ -17,7 +26,7 @@ test('it should add a thought', () => {
 });
 
 test('it should add a new user message', () => {
-  const wrapper = mount(<Chat />);
+  const wrapper = mount(<Chat { ...props } />);
   const input = wrapper.find('[data-test="input"]');
   const button = wrapper.find('[data-test="button"]');
   const message = 'Hello';

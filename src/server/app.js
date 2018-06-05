@@ -4,7 +4,10 @@ export function createServer() {
   const io = new Server();
 
   io.on('connection', (socket) => {
-    socket.on('disconnect', () => {});
+    console.log('user:join');
+    socket.on('disconnect', () => {
+      console.log('user:leave');
+    });
   });
 
   const port = process.env.PORT || 3000;

@@ -5,18 +5,32 @@ import Input from './input';
 import { isCommand, parseCommand } from '../utils/command';
 import { createUser } from '../utils/user';
 import uuid from 'uuid/v4';
+import createSocket from 'socket.io-client';
+
+const socket = createSocket(process.env.REACT_APP_SOCKET_URL);
 
 class Chat extends React.Component {
   static displayName = 'Chat'
 
+  static defaultProps = {
+    connected: false
+  }
+
   state = {
     messages: [],
     users: [],
+    connected: this.props.connected
   }
 
   componentDidMount() {
     this._user = createUser();
     this.addUser(this._user);
+
+    socket.on('connect', () => {
+      this.setState({
+        connected: true
+      });
+    });
   }
 
   addUser = (user) => {
@@ -99,6 +113,9 @@ class Chat extends React.Component {
   }
 
   render() {
+    if (!this.state.connected) {
+      return 'loading...';
+    }
     return (
       <div className="chat">
         <PartnerInfo />
