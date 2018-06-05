@@ -16,12 +16,14 @@ test('it should render properly', () => {
           type: 'user',
           body: 'foo',
           senderId: '1',
+          sentAt: 1528221843537,
         },
         {
           id: '2',
           type: 'user',
           body: 'bar',
-          senderId: '1'
+          senderId: '1',
+          sentAt: 1528221843537,
         }
       ]}
     />

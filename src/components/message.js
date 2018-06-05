@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { userShape } from '../utils/user';
+import format from 'date-fns/format';
 
 const Message = (props) => {
   const sender = props.users.find(user => user.id === props.senderId);
@@ -14,6 +15,9 @@ const Message = (props) => {
     >
       <div className="message-sender">
         { sender.name }
+      </div>
+      <div className="message-sent-at">
+        { format(props.sentAt, 'YYYY. MM. DD. HH:mm') }
       </div>
       <div className="message-body" data-test="body">
         { props.body }
@@ -29,6 +33,7 @@ const propTypes = {
   type: PropTypes.string.isRequired,
   body: PropTypes.string.isRequired,
   senderId: PropTypes.string.isRequired,
+  sentAt: PropTypes.number.isRequired,
 };
 
 export const messageShape = PropTypes.shape(propTypes);

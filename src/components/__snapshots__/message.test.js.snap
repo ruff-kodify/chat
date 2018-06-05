@@ -11,6 +11,11 @@ exports[`it should render properly 1`] = `
     Unknown
   </div>
   <div
+    className="message-sent-at"
+  >
+    2018. 06. 05. 20:04
+  </div>
+  <div
     className="message-body"
     data-test="body"
   >

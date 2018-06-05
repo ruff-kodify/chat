@@ -9,6 +9,7 @@ exports[`it should render properly 1`] = `
     id="1"
     key="1"
     senderId="1"
+    sentAt={1528221843537}
     type="user"
     users={
       Array [
@@ -24,6 +25,7 @@ exports[`it should render properly 1`] = `
     id="2"
     key="2"
     senderId="1"
+    sentAt={1528221843537}
     type="user"
     users={
       Array [
