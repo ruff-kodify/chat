@@ -30,6 +30,11 @@ class Chat extends React.Component {
       this.setState({
         connected: true
       });
+      socket.emit('user:join', this._user);
+    });
+
+    socket.on('user:join', (user) => {
+      this.addUser(user);
     });
   }
 
