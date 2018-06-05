@@ -6,14 +6,30 @@ exports[`it should render properly 1`] = `
   data-id="1"
 >
   <div
-    className="message-sender"
+    className="message-header"
   >
-    Unknown
-  </div>
-  <div
-    className="message-sent-at"
-  >
-    2018. 06. 05. 20:04
+    <div
+      className="message-avatar"
+      style={
+        Object {
+          "background": "#67783a",
+        }
+      }
+    />
+    <div
+      className="message-details"
+    >
+      <div
+        className="message-sender"
+      >
+        Unknown
+      </div>
+      <div
+        className="message-sent-at"
+      >
+        2018. 06. 05. 20:04
+      </div>
+    </div>
   </div>
   <div
     className="message-body"

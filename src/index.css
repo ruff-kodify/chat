@@ -1,5 +1,71 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+}
+
+.messages {
+  height: calc(100% - 91px);
+  display: flex;
+  flex-direction: column;
+  align-content: flex-end;
+  overflow-x: hidden;
+  overflow: auto;
+  padding: 10px;
+  background: #fbfbfb;
+}
+
+.message {
+  display: inline-block;
+  margin-right: auto;
+  margin-bottom: 15px;
+  color: black;
+  overflow: hidden;
+}
+
+.message--me {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.message-header {
+  display: flex;
+  position: relative;
+}
+
+.message--me .message-header {
+  flex-direction: row-reverse;
+}
+
+.message-avatar {
+  width: 30px;
+  height: 30px;
+  background: black;
+  border-radius: 100%;
+}
+
+.message-sender {
+  font-weight: bold;
+  font-size: 12px;
+  padding: 5px 10px 0;
+  color: black;
+}
+
+.message-sent-at {
+  font-style: italic;
+  font-size: 11px;
+  color: #757575;
+  padding: 5px 10px;
+}
+
+.message--me .message-sender,
+.message--me .message-sent-at,
+.message--me .message-body {
+  text-align: right;
+}
+
+.message-body {
+  padding: 10px;
 }

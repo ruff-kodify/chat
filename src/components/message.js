@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { userShape } from '../utils/user';
 import format from 'date-fns/format';
+import ColorHash from 'color-hash';
+
+const colorHash = new ColorHash();
 
 const Message = (props) => {
   const sender = props.users.find(user => user.id === props.senderId);
@@ -11,13 +14,23 @@ const Message = (props) => {
       data-id={ props.id }
       className={ classNames('message', {
         [`message--${props.type}`]: true,
+        [`message--me`]: !!sender.isMe,
       }) }
     >
-      <div className="message-sender">
-        { sender.name }
-      </div>
-      <div className="message-sent-at">
-        { format(props.sentAt, 'YYYY. MM. DD. HH:mm') }
+      <div className="message-header">
+        <div className="message-avatar"
+          style={ {
+            background: colorHash.hex(sender.id)
+          } }
+        />
+        <div className="message-details">
+          <div className="message-sender">
+            { sender.name }
+          </div>
+          <div className="message-sent-at">
+            { format(props.sentAt, 'YYYY. MM. DD. HH:mm') }
+          </div>
+        </div>
       </div>
       <div className="message-body" data-test="body">
         { props.body }

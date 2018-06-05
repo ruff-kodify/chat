@@ -23,7 +23,10 @@ class Chat extends React.Component {
 
   componentDidMount() {
     this._user = createUser();
-    this.addUser(this._user);
+    this.addUser({
+      ...this._user,
+      isMe: true
+    });
 
     socket.on('connect', () => {
       this.setState({
