@@ -30,11 +30,35 @@ class Chat extends React.Component {
       this.setState({
         connected: true
       });
-      socket.emit('user:join', this._user);
+      this.updateUser(this._user.id, {
+        connected: true
+      });
+      socket.emit('user:join', {
+        ...this._user,
+        connected: true,
+      });
+    });
+
+    socket.on('users:get', (users) => {
+      this.setState((state) => {
+        return {
+          users: state.users.concat(
+            users.filter(user => user.id !== this._user.id)
+          )
+        };
+      });
     });
 
     socket.on('user:join', (user) => {
       this.addUser(user);
+    });
+
+    socket.on('user:update', ({ id, props }) => {
+      this.updateUser(id, props);
+    });
+
+    socket.on('user:leave', (id) => {
+      this.removeUser(id);
     });
 
     socket.on('message', (message) => {
@@ -60,6 +84,28 @@ class Chat extends React.Component {
         return user;
       })
     }));
+  }
+
+  removeUser = (id) => {
+    this.setState((state) => ({
+      users: state.users.map(user => {
+        if (user.id === id) {
+          return {
+            ...user,
+            connected: false
+          };
+        }
+        return user;
+      })
+    }));
+  }
+
+  updateAndBroadcastUser = (id, props) => {
+    this.updateUser(id, props);
+    socket.emit('user:update', {
+      id,
+      props
+    });
   }
 
   addMessage = ({ body, type, senderId }) => {
@@ -91,7 +137,7 @@ class Chat extends React.Component {
           alert('Invalid argument');
           return;
         }
-        this.updateUser(this._user.id, {
+        this.updateAndBroadcastUser(this._user.id, {
           name: args[0]
         });
         break;

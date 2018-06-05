@@ -3,15 +3,28 @@ import uuid from 'uuid/v4';
 
 export function createServer() {
   const io = new Server();
-  const sockets = [];
+  let sockets = [];
+  let users = [];
 
   io.on('connection', (socket) => {
     sockets.push(socket);
 
     socket.on('user:join', (user) => {
 
+      users.push(Object.assign({}, user, {
+        clientId: socket.id
+      }));
+
+      socket.emit('users:get', users);
+
       sockets.filter(s => s.id !== socket.id).forEach(s => {
         s.emit('user:join', user);
+      });
+    });
+
+    socket.on('user:update', (data) => {
+      sockets.filter(s => s.id !== socket.id).forEach(s => {
+        s.emit('user:update', data);
       });
     });
 
@@ -22,7 +35,12 @@ export function createServer() {
     });
 
     socket.on('disconnect', () => {
-      console.log('user:leave');
+      sockets = sockets.filter(s => s.id !== socket.id);
+      const user = users.find(user => user.clientId === socket.id);
+      sockets.forEach(s => {
+        s.emit('user:leave', user.id);
+      });
+      users = users.filter(user => user.clientId !== socket.id);
     });
   });
 

@@ -11,4 +11,5 @@ export const createUser = () => {
 export const userShape = PropTypes.shape({
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  connected: PropTypes.bool
 });
