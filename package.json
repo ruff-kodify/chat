@@ -27,7 +27,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "start-server": "PORT=3001 nodemon --exec babel-node src/server"
+    "start-server": "PORT=${PORT-3001} nodemon --exec babel-node src/server",
+    "postinstall": "cp .env.example .env"
   },
   "jest": {
     "snapshotSerializers": [
