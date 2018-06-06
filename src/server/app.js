@@ -7,6 +7,15 @@ export function createServer() {
   let users = [];
 
   io.on('connection', (socket) => {
+
+    // tell everyone except me
+    const broadcast = (event, ...rest) => {
+      sockets.filter(s => s.id !== socket.id).forEach(s => {
+        s.emit(event, ...rest);
+      });
+    };
+
+    // cache the socket
     sockets.push(socket);
 
     socket.on('user:join', (user) => {
@@ -15,49 +24,44 @@ export function createServer() {
         clientId: socket.id
       }));
 
+      // tell the user who has just joined about the active users
       socket.emit('users:get', users);
 
-      sockets.filter(s => s.id !== socket.id).forEach(s => {
-        s.emit('user:join', user);
-      });
+      broadcast('user:join', user);
     });
 
     socket.on('user:update', (data) => {
-      sockets.filter(s => s.id !== socket.id).forEach(s => {
-        s.emit('user:update', data);
-      });
+      broadcast('user:update', data);
     });
 
     socket.on('user:typing', (id) => {
-      sockets.filter(s => s.id !== socket.id).forEach(s => {
-        s.emit('user:typing', id);
-      });
+      broadcast('user:typing', id);
     });
 
     socket.on('message', (message) => {
-      sockets.filter(s => s.id !== socket.id).forEach(s => {
-        s.emit('message', message);
-      });
+      broadcast('message', message);
     });
 
     socket.on('message:remove', (id) => {
-      sockets.filter(s => s.id !== socket.id).forEach(s => {
-        s.emit('message:remove', id);
-      });
+      broadcast('message:remove', id);
     });
 
     socket.on('countdown', (data) => {
-      sockets.filter(s => s.id !== socket.id).forEach(s => {
-        s.emit('countdown', data);
-      });
+      broadcast('countdown', data);
     });
 
     socket.on('disconnect', () => {
+      // remove the user's socket from the cache
       sockets = sockets.filter(s => s.id !== socket.id);
+
+      // find the user who's leaving
       const user = users.find(user => user.clientId === socket.id);
+      // let others know about it
       sockets.forEach(s => {
         s.emit('user:leave', user.id);
       });
+
+      // remove the user from the cache
       users = users.filter(user => user.clientId !== socket.id);
     });
   });
